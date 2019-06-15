@@ -100,7 +100,7 @@
                 "--enable-xsl",
                 "--enable-zlib",
                 "--with-argon2",
-                "--with-config-file-scan-dir=${HOME}/.config/php/ini",
+                "--with-config-file-scan-dir=${HOME}/.config/php7/ini",
                 "--with-libzip",
                 "--with-openssl",
                 "--with-tsrm-pthreads",
@@ -112,7 +112,10 @@
                     "url":"https://www.php.net/distributions/php-7.3.6.tar.gz",
                     "sha256":"72fbf223ff8659a61eed08eebffb4ede0256e7a69d2151ae24affa5377b70bb8"
                 }
-            ]
+            ],
+			      "post-install": [
+				      "install -Dm644 php.ini-development ${FLATPAK_DEST}/lib/php.ini"
+			      ]
         },
         {  
             "name":"xdebug",
@@ -122,7 +125,7 @@
                 "./configure --with-php-config=${FLATPAK_DEST}/bin/php-config",
                 "make -j$FLATPAK_BUILDER_N_JOBS",
                 "install -Dm755 modules/xdebug.so ${FLATPAK_DEST}/lib/php/extensions/no-debug-non-zts-20180731/xdebug.so",
-                "install -Dm644 php.ini ${FLATPAK_DEST}/lib/php.ini"
+                "install -Dm644 xdebug.ini ${FLATPAK_DEST}/lib/xdebug.ini"
             ],
             "sources":[  
                 {  
@@ -132,7 +135,7 @@
                 },
                 {  
                     "type":"file",
-                    "path":"php.ini"
+                    "path":"xdebug.ini"
                 }
             ]
         },

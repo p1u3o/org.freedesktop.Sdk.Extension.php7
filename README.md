@@ -12,14 +12,14 @@ Includes
 * [phpcbf/phpcs](https://github.com/squizlabs/PHP_CodeSniffer) (3.4.2)
 * [php-cs-fixer](https://github.com/FriendsOfPHP/PHP-CS-Fixer) (2.15.1)
 
-You can place your own ini files in `$HOME/.config/php/ini/`
+You can place your own ini files in `$HOME/.config/php7/ini/`
 
 #### Troubleshooting
 `/usr/bin/env: ‘php’: No such file or directory`
 
 Run `. /usr/lib/sdk/php7/enable.sh` or add `/usr/lib/sdk/php7/bin` to your $PATH.
 
-Hopefully in the future there is an organised way for extensions to add to the path. See this [related issue](https://github.com/flathub/com.visualstudio.code/issues/72).
+Adding IDE SDKs to /usr/lib/sdk really does not seem like the right thing to do, hopefully in the future there is an organised way for extensions to add to the path. See this [related issue](https://github.com/flathub/com.visualstudio.code/issues/72).
 
 #### Modules
 
