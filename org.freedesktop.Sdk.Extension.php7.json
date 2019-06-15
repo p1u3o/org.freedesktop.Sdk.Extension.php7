@@ -12,17 +12,99 @@
         "strip":true,
         "prefix":"/usr/lib/sdk/php7",
         "env":{  
-            "V":"1"
+
         }
     },
+    "cleanup":[  
+        "/share/info",
+        "/share/man",
+        "*.a",
+        "*.la"
+    ],
     "modules":[  
         {  
+            "name":"libzip",
+            "buildsystem":"cmake",
+            "sources":[  
+                {  
+                    "type":"archive",
+                    "url":"https://libzip.org/download/libzip-1.5.2.tar.xz",
+                    "sha256":"b3de4d4bd49a01e0cab3507fc163f88e1651695b6b9cb25ad174dbe319d4a3b4"
+                }
+            ]
+        },
+        {  
             "name":"php",
-            "buildsystem":"simple",
-            "build-commands": [
-              "./configure --disable-cgi --with-mysqli --prefix=${FLATPAK_DEST} --with-config-file-scan-dir=${HOME}/.config/php/ini",
-              "make -j$FLATPAK_BUILDER_N_JOBS",
-              "make install"
+            "buildsystem":"autotools",
+            "config-opts":[  
+                "--disable-cgi",
+                "--enable-calendar",
+                "--enable-dba=shared",
+                "--enable-bcmath",
+                "--enable-bz2",
+                "--enable-ctype",
+                "--enable-curl",
+                "--enable-date",
+                "--enable-dba",
+                "--enable-dom",
+                "--enable-enchant",
+                "--enable-exif",
+                "--enable-fileinfo",
+                "--enable-filter",
+                "--enable-ftp",
+                "--enable-gd",
+                "--enable-gettext",
+                "--enable-gmp",
+                "--enable-hash",
+                "--enable-iconv",
+                "--enable-imap",
+                "--enable-intl",
+                "--enable-json",
+                "--enable-ldap",
+                "--enable-libxml",
+                "--enable-mbstring",
+                "--enable-mysqli",
+                "--enable-mysqlnd",
+                "--enable-opcache",
+                "--enable-openssl",
+                "--enable-pcntl",
+                "--enable-pcre",
+                "--enable-pdo",
+                "--enable-pdo_mysql",
+                "--enable-pdo_pgsql",
+                "--enable-pdo_sqlite",
+                "--enable-phar",
+                "--enable-posix",
+                "--enable-phpdbg",
+                "--enable-pspell",
+                "--enable-readline",
+                "--enable-re2c-cgoto",
+                "--enable-recode",
+                "--enable-reflection",
+                "--enable-session",
+                "--enable-simplexml",
+                "--enable-snmp",
+                "--enable-sockets",
+                "--enable-sodium",
+                "--enable-sqlite3",
+                "--enable-sysvmsg",
+                "--enable-sysvmem",
+                "--enable-sysvshm",
+                "--enable-tidy",
+                "--enable-tokenizer",
+                "--enable-wddx",
+                "--enable-xml",
+                "--enable-xmlreader",
+                "--enable-xmlrpc",
+                "--enable-xmlwriter",
+                "--enable-xsl",
+                "--enable-zlib",
+                "--with-argon2",
+                "--with-config-file-scan-dir=${HOME}/.config/php/ini",
+                "--with-libzip",
+                "--with-openssl",
+                "--with-tsrm-pthreads",
+                "--with-zlib"
             ],
             "sources":[  
                 {  
@@ -35,17 +117,12 @@
         {  
             "name":"xdebug",
             "buildsystem":"simple",
-            "build-options": {
-                "env": {
-                    "PATH": "/bin/"
-                }
-            },
-            "build-commands": [
-              "${FLATPAK_DEST}/bin/phpize",
-              "./configure --with-php-config=${FLATPAK_DEST}/bin/php-config",
-              "make -j$FLATPAK_BUILDER_N_JOBS",
-              "cp modules/xdebug.so ${FLATPAK_DEST}/lib/php/extensions/no-debug-non-zts-20180731",
-              "install -Dm644 php.ini ${FLATPAK_DEST}/lib/php.ini"
+            "build-commands":[  
+                "${FLATPAK_DEST}/bin/phpize",
+                "./configure --with-php-config=${FLATPAK_DEST}/bin/php-config",
+                "make -j$FLATPAK_BUILDER_N_JOBS",
+                "install -Dm755 modules/xdebug.so ${FLATPAK_DEST}/lib/php/extensions/no-debug-non-zts-20180731/xdebug.so",
+                "install -Dm644 php.ini ${FLATPAK_DEST}/lib/php.ini"
             ],
             "sources":[  
                 {  
@@ -59,21 +136,74 @@
                 }
             ]
         },
-        {
-            "name":"scripts",
-            "buildsystem": "simple",
-            "build-commands": [
-              "cp enable.sh ${FLATPAK_DEST}"
+        {  
+            "name":"composer",
+            "buildsystem":"simple",
+            "build-commands":[  
+                "install -Dm755 composer.phar ${FLATPAK_DEST}/bin/composer"
             ],
-            "sources": [  
+            "sources":[  
+                {  
+                    "type":"file",
+                    "url":"https://github.com/composer/composer/releases/download/1.8.6/composer.phar",
+                    "sha256":"f7d23de9e6d8dc40041e81ebeb20b411aa0fb04d0838797d10b75ae5e59e12a3"
+                }
+            ]
+        },
+        {  
+            "name":"tools",
+            "buildsystem":"simple",
+            "build-commands":[  
+                "install -Dm755 phpcbf.phar ${FLATPAK_DEST}/bin/phpcbf",
+                "install -Dm755 phpcbf.phar ${FLATPAK_DEST}/bin/phpcs",
+                "install -Dm755 php-cs-fixer.phar ${FLATPAK_DEST}/bin/php-cs-fixer"
+            ],
+            "sources":[  
+                {  
+                    "type":"file",
+                    "url":"https://github.com/squizlabs/PHP_CodeSniffer/releases/download/3.4.2/phpcbf.phar",
+                    "sha256":"d7b9b36e92b674ebbaceb1d80cdf1fdd190bc8cfd00e1ce68ed2b712513e4423"
+                },
+                {  
+                    "type":"file",
+                    "url":"https://github.com/squizlabs/PHP_CodeSniffer/releases/download/3.4.2/phpcs.phar",
+                    "sha256":"6966a9d41099caab6fe63728f20ff0dba4c9c5a2b157c735ece98b6367e16942"
+                },
+                {  
+                    "type":"file",
+                    "url":"https://github.com/FriendsOfPHP/PHP-CS-Fixer/releases/download/v2.15.1/php-cs-fixer.phar",
+                    "sha256":"8c56b58fd3733f08c160fe60b18536f904f93088954c518b7c0bc96de26c7861"
+                }
+            ]
+        },
+        {  
+            "name":"scripts",
+            "buildsystem":"simple",
+            "build-commands":[  
+                "mkdir -p /usr/lib/sdk/php7/share/appdata",
+                "install -Dm755 enable.sh ${FLATPAK_DEST}/enable.sh",
+                "install -Dm644 LICENSES ${FLATPAK_DEST}/LICENSES",
+                "cp org.freedesktop.Sdk.Extension.php7.appdata.xml ${FLATPAK_DEST}/share/appdata",
+                "mkdir -p /usr/lib/sdk/php7/share/appdata",
+                "appstream-compose --basename=org.freedesktop.Sdk.Extension.php7 --prefix=${FLATPAK_DEST} --origin=flatpak org.freedesktop.Sdk.Extension.php7"
+            ],
+            "sources":[  
                 {  
                     "type":"script",
-                    "commands": [
-                      "export PATH=$PATH:/usr/lib/sdk/php7/bin"
+                    "commands":[  
+                        "export PATH=$PATH:/usr/lib/sdk/php7/bin"
                     ],
-                    "dest-filename":"enable.sh"  
+                    "dest-filename":"enable.sh"
+                },
+                {  
+                    "type":"file",
+                    "path":"org.freedesktop.Sdk.Extension.php7.appdata.xml"
+                },
+                {  
+                    "type":"file",
+                    "path":"LICENSES"
                 }
-              ]
+            ]
         }
     ]
 }
