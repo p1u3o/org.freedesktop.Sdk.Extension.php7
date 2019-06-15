@@ -1,0 +1,79 @@
+{  
+    "app-id":"org.freedesktop.Sdk.Extension.php7",
+    "branch":"18.08",
+    "runtime":"org.freedesktop.Sdk",
+    "runtime-version":"18.08",
+    "sdk":"org.freedesktop.Sdk",
+    "build-extension":true,
+    "separate-locales":false,
+    "appstream-compose":false,
+    "build-options":{  
+        "no-debuginfo":true,
+        "strip":true,
+        "prefix":"/usr/lib/sdk/php7",
+        "env":{  
+            "V":"1"
+        }
+    },
+    "modules":[  
+        {  
+            "name":"php",
+            "buildsystem":"simple",
+            "build-commands": [
+              "./configure --disable-cgi --with-mysqli --prefix=${FLATPAK_DEST} --with-config-file-scan-dir=${HOME}/.config/php/ini",
+              "make -j$FLATPAK_BUILDER_N_JOBS",
+              "make install"
+            ],
+            "sources":[  
+                {  
+                    "type":"archive",
+                    "url":"https://www.php.net/distributions/php-7.3.6.tar.gz",
+                    "sha256":"72fbf223ff8659a61eed08eebffb4ede0256e7a69d2151ae24affa5377b70bb8"
+                }
+            ]
+        },
+        {  
+            "name":"xdebug",
+            "buildsystem":"simple",
+            "build-options": {
+                "env": {
+                    "PATH": "/bin/"
+                }
+            },
+            "build-commands": [
+              "${FLATPAK_DEST}/bin/phpize",
+              "./configure --with-php-config=${FLATPAK_DEST}/bin/php-config",
+              "make -j$FLATPAK_BUILDER_N_JOBS",
+              "cp modules/xdebug.so ${FLATPAK_DEST}/lib/php/extensions/no-debug-non-zts-20180731",
+              "install -Dm644 php.ini ${FLATPAK_DEST}/lib/php.ini"
+            ],
+            "sources":[  
+                {  
+                    "type":"archive",
+                    "url":"http://xdebug.org/files/xdebug-2.7.2.tgz",
+                    "sha256":"b0f3283aa185c23fcd0137c3aaa58554d330995ef7a3421e983e8d018b05a4a6"
+                },
+                {  
+                    "type":"file",
+                    "path":"php.ini"
+                }
+            ]
+        },
+        {
+            "name":"scripts",
+            "buildsystem": "simple",
+            "build-commands": [
+              "cp enable.sh ${FLATPAK_DEST}"
+            ],
+            "sources": [  
+                {  
+                    "type":"script",
+                    "commands": [
+                      "export PATH=$PATH:/usr/lib/sdk/php7/bin"
+                    ],
+                    "dest-filename":"enable.sh"  
+                }
+              ]
+        }
+    ]
+}

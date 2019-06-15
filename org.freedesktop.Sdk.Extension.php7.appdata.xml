@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="runtime">
+  <id>org.freedesktop.Sdk.Extension.php7</id>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>PHP</project_license>
+  <name>PHP7 extension</name>
+  <summary>PHP7 SDK extension</summary>
+  <description>
+    <p>
+      This SDK extension allows you to build and run PHP programs.
+    </p>
+  </description>
+</component>
+
