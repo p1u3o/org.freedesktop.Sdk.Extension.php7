@@ -104,7 +104,8 @@
                 "--with-libzip",
                 "--with-openssl",
                 "--with-tsrm-pthreads",
-                "--with-zlib"
+                "--with-zlib",
+		"--with-gd"
             ],
             "sources":[  
                 {  
