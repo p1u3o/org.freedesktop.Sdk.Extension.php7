@@ -105,7 +105,8 @@
                 "--with-openssl",
                 "--with-tsrm-pthreads",
                 "--with-zlib",
-		"--with-gd"
+		"--with-gd",
+		"--with-curl"
             ],
             "sources":[  
                 {  
